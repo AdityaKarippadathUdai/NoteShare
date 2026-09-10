@@ -1,0 +1,6 @@
+{
+  "name": "NoteDrop",
+  "description": "Temporary secure file sharing with unique drop codes, automated expiration, and download limits.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
