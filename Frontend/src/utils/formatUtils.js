@@ -54,17 +54,4 @@ export function formatDate(isoString) {
   }
 }
 
-/**
- * Generates an unambiguous random 6-character drop code for local testing.
- * Omits easily confused characters like 0/O, 1/I.
- * 
- * @returns {string}
- */
-export function generateRandomCode() {
-  const chars = '23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
-  let result = '';
-  for (let i = 0; i < 6; i++) {
-    result += chars.charAt(Math.floor(Math.random() * chars.length));
-  }
-  return result;
-}
+
