@@ -19,7 +19,7 @@ This backend powers the NoteDrop file-sharing app using Node.js, Express, Postgr
 5. Copy the project URL and service-role secret from the Supabase dashboard.
 6. Add them to a backend `.env` file.
 
-> Warning: The Supabase service-role key must only exist on the backend. Never expose it to the React frontend.
+> Warning: The Supabase secret key must only exist on the backend. Never expose it to the React frontend.
 
 ## Environment configuration
 
@@ -32,7 +32,7 @@ PORT=8000
 NODE_ENV=development
 FRONTEND_URL=http://localhost:5173
 SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+SUPABASE_SECRET_KEY=your-server-side-secret-key
 SUPABASE_STORAGE_BUCKET=notedrop-files
 MAX_FILE_SIZE_MB=50
 CLEANUP_INTERVAL_MS=60000
