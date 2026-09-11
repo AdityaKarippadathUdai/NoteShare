@@ -108,19 +108,6 @@ export function Receive() {
           </div>
         </div>
 
-        {/* Demo drop hint banner */}
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900/40 border border-slate-200 dark:border-slate-800/80 text-center shadow-sm dark:shadow-none">
-          <p className="text-xs text-slate-600 dark:text-slate-400">
-            Trying out the demo? Test with code:{' '}
-            <button
-              type="button"
-              onClick={() => setCodeInput('7KQ92P')}
-              className="font-mono text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300 font-semibold underline underline-offset-2 ml-1 cursor-pointer"
-            >
-              7KQ-92P
-            </button>
-          </p>
-        </div>
       </div>
     </div>
   );
