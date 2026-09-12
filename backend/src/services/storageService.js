@@ -1,17 +1,9 @@
-import { createClient } from '@supabase/supabase-js';
-import env from '../config/env.js';
+import { supabase, storageBucket } from '../config/supabase.js';
 import { AppError, errorCodes } from '../utils/errors.js';
 
-const supabase = createClient(env.SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY, {
-  auth: {
-    persistSession: false,
-    autoRefreshToken: false,
-  },
-});
-
-export async function uploadFileToStorage(fileBuffer, path, contentType) {
+export async function uploadFile(fileBuffer, path, contentType) {
   try {
-    const { error } = await supabase.storage.from(env.SUPABASE_STORAGE_BUCKET).upload(path, fileBuffer, {
+    const { error } = await supabase.storage.from(storageBucket).upload(path, fileBuffer, {
       contentType,
       upsert: false,
       cacheControl: '3600',
@@ -30,11 +22,11 @@ export async function uploadFileToStorage(fileBuffer, path, contentType) {
   }
 }
 
-export async function deleteFileFromStorage(storagePath) {
+export async function deleteFile(storagePath) {
   if (!storagePath) return;
 
   try {
-    const { error } = await supabase.storage.from(env.SUPABASE_STORAGE_BUCKET).remove([storagePath]);
+    const { error } = await supabase.storage.from(storageBucket).remove([storagePath]);
     if (error) {
       console.warn('[Storage] Failed to delete file:', storagePath, error.message);
     }
@@ -43,10 +35,10 @@ export async function deleteFileFromStorage(storagePath) {
   }
 }
 
-export async function getSignedDownloadUrl(storagePath, expiresInSeconds = 60) {
+export async function createSignedDownloadUrl(storagePath, expiresInSeconds = 60) {
   try {
     const { data, error } = await supabase.storage
-      .from(env.SUPABASE_STORAGE_BUCKET)
+      .from(storageBucket)
       .createSignedUrl(storagePath, expiresInSeconds);
 
     if (error || !data?.signedUrl) {
@@ -62,7 +54,14 @@ export async function getSignedDownloadUrl(storagePath, expiresInSeconds = 60) {
   }
 }
 
+export const uploadFileToStorage = uploadFile;
+export const deleteFileFromStorage = deleteFile;
+export const getSignedDownloadUrl = createSignedDownloadUrl;
+
 export default {
+  uploadFile,
+  deleteFile,
+  createSignedDownloadUrl,
   uploadFileToStorage,
   deleteFileFromStorage,
   getSignedDownloadUrl,
