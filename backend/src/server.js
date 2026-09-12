@@ -5,25 +5,24 @@ import { pool } from './services/dropService.js';
 import startCleanupWorker from './workers/cleanupWorker.js';
 
 const server = http.createServer(app);
+let cleanupWorker;
 
 async function startServer() {
-  try {
-    const client = await pool.connect();
-    client.release();
-    console.log('[Database] Connected');
-  } catch (error) {
-    console.error('[Database] Connection failed:', error.message);
-  }
+  const client = await pool.connect();
+  client.release();
+  console.log('[Database] Connected');
 
   server.listen(env.PORT, () => {
     console.log(`Server started on port ${env.PORT}`);
   });
 
-  startCleanupWorker();
+  cleanupWorker = startCleanupWorker();
 }
 
 const shutdown = async (signal) => {
   console.log(`[Server] Received ${signal}. Shutting down gracefully...`);
+  cleanupWorker?.stop();
+  await pool.end();
   server.close(() => {
     console.log('[Server] HTTP server closed');
     process.exit(0);
@@ -40,10 +39,15 @@ process.on('SIGTERM', () => shutdown('SIGTERM'));
 
 process.on('uncaughtException', (error) => {
   console.error('[Server] Uncaught exception:', error.message);
+  process.exit(1);
 });
 
 process.on('unhandledRejection', (reason) => {
   console.error('[Server] Unhandled rejection:', reason);
+  process.exit(1);
 });
 
-startServer();
+startServer().catch((error) => {
+  console.error('[Server] Startup failed:', error.message);
+  process.exit(1);
+});
