@@ -68,7 +68,7 @@ export async function verifyPassword(req, res, next) {
 export async function downloadDrop(req, res, next) {
   try {
     const code = normalizeDropCode(req.params.code);
-    const password = req.query.password ? String(req.query.password) : null;
+    const password = req.headers['x-drop-password'] ? String(req.headers['x-drop-password']) : null;
 
     const result = await downloadDropFile(code, password);
 
