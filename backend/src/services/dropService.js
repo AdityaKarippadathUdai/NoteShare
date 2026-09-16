@@ -212,7 +212,7 @@ export async function getDropMetadata(code) {
   }
 
   if (state.status === 'download_limit_reached') {
-    throw new AppError(errorCodes.DOWNLOAD_LIMIT_REACHED, 'This drop has reached its maximum number of downloads.', 403);
+    throw new AppError(errorCodes.DOWNLOAD_LIMIT_REACHED, 'Maximum download limit reached', 403);
   }
 
   return buildDropResponse(state);
@@ -247,7 +247,7 @@ export async function downloadDropFile(code, password = null) {
   }
 
   if (state.status === 'download_limit_reached') {
-    throw new AppError(errorCodes.DOWNLOAD_LIMIT_REACHED, 'This drop has reached its maximum number of downloads.', 403);
+    throw new AppError(errorCodes.DOWNLOAD_LIMIT_REACHED, 'Maximum download limit reached', 403);
   }
 
   if (state.password_hash) {
@@ -289,7 +289,7 @@ export async function downloadDropFile(code, password = null) {
     const maxDownloads = current.max_downloads === null || current.max_downloads === undefined ? null : Number(current.max_downloads);
     if (maxDownloads !== null && currentDownloads >= maxDownloads) {
       await client.query("UPDATE drops SET status = 'download_limit_reached' WHERE id = $1", [current.id]);
-      throw new AppError(errorCodes.DOWNLOAD_LIMIT_REACHED, 'This drop has reached its maximum number of downloads.', 403);
+      throw new AppError(errorCodes.DOWNLOAD_LIMIT_REACHED, 'Maximum download limit reached', 403);
     }
 
     const nextCount = currentDownloads + 1;
