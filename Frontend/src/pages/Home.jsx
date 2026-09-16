@@ -8,6 +8,7 @@ import UploadSettings from '../components/UploadSettings';
 import ProgressBar from '../components/ProgressBar';
 import { useToast } from '../components/Toast';
 import dropService from '../services/dropService';
+import { getErrorMessage } from '../utils/errorUtils';
 
 export function Home() {
   const navigate = useNavigate();
@@ -86,7 +87,7 @@ export function Home() {
         state: { drop: dropResult, isCreator: true },
       });
     } catch (err) {
-      const errorMsg = err.message || 'Upload failed. Please try again.';
+      const errorMsg = getErrorMessage(err, 'Upload failed. Please try again.');
       addToast(errorMsg, 'error');
       setIsUploading(false);
       setUploadProgress(null);
