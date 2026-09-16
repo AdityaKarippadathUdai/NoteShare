@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { getErrorMessage } from '../utils/errorUtils';
 import { Lock, Eye, EyeOff, ShieldAlert } from 'lucide-react';
 
 /**
@@ -110,7 +111,7 @@ export function PasswordToggle({
           {error && (
             <div className="flex items-center gap-1.5 text-xs text-rose-600 dark:text-rose-400 font-medium">
               <ShieldAlert className="w-3.5 h-3.5 shrink-0" />
-              <span>{error}</span>
+              <span>{getErrorMessage(error)}</span>
             </div>
           )}
 
