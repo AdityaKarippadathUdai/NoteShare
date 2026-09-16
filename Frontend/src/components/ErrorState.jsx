@@ -43,8 +43,8 @@ export function ErrorState({
       break;
 
     case 'limit_reached':
-      defaultTitle = 'Download limit reached';
-      defaultMessage = 'This drop has reached its maximum number of downloads.';
+      defaultTitle = 'Maximum download limit reached';
+      defaultMessage = 'This file has reached the maximum number of allowed downloads and is no longer available.';
       Icon = AlertOctagon;
       iconColor = 'text-rose-600 dark:text-rose-400';
       iconBg = 'bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-800/30';
