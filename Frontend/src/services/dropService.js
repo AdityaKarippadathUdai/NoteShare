@@ -97,7 +97,7 @@ export async function downloadDrop(code, password = null) {
   }
 
   const response = await apiClient.get(`/drops/${cleanCode}/download`, {
-    params: password ? { password } : {},
+    headers: password ? { 'X-Drop-Password': password } : {},
     responseType: 'blob',
   });
 
