@@ -59,11 +59,11 @@ export function useDrop(initialCode) {
     setError(null);
 
     try {
-      await dropService.verifyPassword(code, password);
+      const verification = await dropService.verifyPassword(code, password);
       setVerifiedPassword(password);
       setIsUnlocked(true);
       setRequiresPassword(false);
-      return { success: true, data };
+      return { success: true, data: verification };
     } catch (err) {
       setPasswordAttempts((prev) => prev + 1);
       setError(err);
