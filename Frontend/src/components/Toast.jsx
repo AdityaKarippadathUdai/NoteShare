@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import { CheckCircle2, AlertCircle, Info, AlertTriangle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getErrorMessage } from '../utils/errorUtils';
 
 export const ToastContext = createContext(null);
 
@@ -17,7 +18,7 @@ export function ToastProvider({ children }) {
 
   const addToast = useCallback((message, type = 'success', duration = 4000) => {
     const id = `toast_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
-    const newToast = { id, message, type, createdAt: Date.now() };
+    const newToast = { id, message: getErrorMessage(message), type, createdAt: Date.now() };
 
     setToasts((prev) => [...prev, newToast]);
 
