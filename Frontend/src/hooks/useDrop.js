@@ -14,6 +14,7 @@ export function useDrop(initialCode) {
   const [error, setError] = useState(null);
   const [requiresPassword, setRequiresPassword] = useState(false);
   const [isUnlocked, setIsUnlocked] = useState(false);
+  const [verifiedPassword, setVerifiedPassword] = useState(null);
   const [isDownloading, setIsDownloading] = useState(false);
   const [passwordAttempts, setPasswordAttempts] = useState(0);
 
@@ -31,9 +32,11 @@ export function useDrop(initialCode) {
       if (data.requiresPassword) {
         setRequiresPassword(true);
         setIsUnlocked(false);
+        setVerifiedPassword(null);
       } else {
         setRequiresPassword(false);
         setIsUnlocked(true);
+        setVerifiedPassword(null);
       }
     } catch (err) {
       setError(err);
@@ -56,8 +59,8 @@ export function useDrop(initialCode) {
     setError(null);
 
     try {
-      const data = await dropService.verifyPassword(code, password);
-      setDrop(data);
+      await dropService.verifyPassword(code, password);
+      setVerifiedPassword(password);
       setIsUnlocked(true);
       setRequiresPassword(false);
       return { success: true, data };
@@ -75,7 +78,7 @@ export function useDrop(initialCode) {
 
     setIsDownloading(true);
     try {
-      const result = await dropService.downloadDrop(code, password);
+      const result = await dropService.downloadDrop(code, password || verifiedPassword);
       // If drop had max downloads, update remaining count
       if (drop && drop.maxDownloads) {
         setDrop((prev) => prev ? {
@@ -90,7 +93,7 @@ export function useDrop(initialCode) {
     } finally {
       setIsDownloading(false);
     }
-  }, [code, drop]);
+  }, [code, drop, verifiedPassword]);
 
   return {
     code,
@@ -99,6 +102,7 @@ export function useDrop(initialCode) {
     error,
     requiresPassword,
     isUnlocked,
+    verifiedPassword,
     isDownloading,
     passwordAttempts,
     loadDrop,
