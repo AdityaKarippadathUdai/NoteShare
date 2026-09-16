@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   Download,
@@ -47,13 +47,6 @@ export function DownloadPage() {
   const [unlockError, setUnlockError] = useState(null);
   const [copiedLink, setCopiedLink] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
-
-  // Reload when code parameter changes
-  useEffect(() => {
-    if (cleanCode) {
-      loadDrop(cleanCode);
-    }
-  }, [cleanCode, loadDrop]);
 
   const handleUnlock = async (e) => {
     e.preventDefault();
@@ -136,8 +129,11 @@ export function DownloadPage() {
   }
 
   const isExpired = drop.expiresAt ? new Date(drop.expiresAt).getTime() <= Date.now() : false;
-  const isLimitReached = drop.maxDownloads !== null && drop.downloadCount >= drop.maxDownloads;
-  const remainingDownloads = drop.maxDownloads !== null ? Math.max(0, drop.maxDownloads - (drop.downloadCount || 0)) : null;
+  const hasDownloadLimit = Number.isInteger(drop.maxDownloads);
+  const isLimitReached = hasDownloadLimit && drop.downloadCount >= drop.maxDownloads;
+  const remainingDownloads = hasDownloadLimit
+    ? Math.max(0, drop.maxDownloads - (drop.downloadCount || 0))
+    : null;
 
   // Fallback error screens if local expiration or limits hit
   if (isExpired) {
@@ -157,8 +153,8 @@ export function DownloadPage() {
       <div className="py-16 px-4">
         <ErrorState
           type="limit_reached"
-          title="Download limit reached"
-          message="This drop has reached its maximum number of downloads."
+          title="Maximum download limit reached"
+          message="This file has reached the maximum number of allowed downloads and is no longer available."
         />
       </div>
     );
