@@ -322,6 +322,7 @@ export async function downloadDropFile(code, password = null) {
     if (error instanceof AppError) {
       throw error;
     }
+    console.error('[Download] Database operation failed:', error.message);
     throw new AppError(errorCodes.DATABASE_ERROR, 'Download failed.', 500);
   } finally {
     client.release();
