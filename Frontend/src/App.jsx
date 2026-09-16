@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -11,6 +11,11 @@ import Receive from './pages/Receive';
 import DownloadPage from './pages/Download';
 import About from './pages/About';
 import NotFound from './pages/NotFound';
+
+function LegacyDownloadRedirect() {
+  const { code } = useParams();
+  return <Navigate to={`/d/${code}`} replace />;
+}
 
 function AnimatedRoutes() {
   const location = useLocation();
@@ -32,7 +37,7 @@ function AnimatedRoutes() {
           <Route path="/d/:code" element={<DownloadPage />} />
           <Route path="/about" element={<About />} />
           {/* Also route direct code paths or legacy links */}
-          <Route path="/download/:code" element={<Navigate to="/d/:code" replace />} />
+          <Route path="/download/:code" element={<LegacyDownloadRedirect />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </motion.div>
