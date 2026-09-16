@@ -1,6 +1,19 @@
 import apiClient from './api';
 import { normalizeCode } from '../utils/formatUtils';
 
+function normalizeDropResponse(payload) {
+  const drop = payload?.drop || payload?.data || payload;
+
+  if (!drop || typeof drop !== 'object') {
+    return drop;
+  }
+
+  return {
+    ...drop,
+    managementToken: payload?.managementToken,
+  };
+}
+
 /**
  * Creates a new drop by uploading a file with configured parameters.
  *
@@ -45,7 +58,7 @@ export async function createDrop(params, onUploadProgress) {
     },
   });
 
-  return response.data;
+  return normalizeDropResponse(response.data);
 }
 
 export async function getDrop(code) {
@@ -58,7 +71,7 @@ export async function getDrop(code) {
   }
 
   const response = await apiClient.get(`/drops/${cleanCode}`);
-  return response.data;
+  return normalizeDropResponse(response.data);
 }
 
 export async function verifyPassword(code, password) {
