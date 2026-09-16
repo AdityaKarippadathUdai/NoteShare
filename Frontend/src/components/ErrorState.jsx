@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Lock, FileX2, AlertOctagon, RefreshCw, PlusCircle, ArrowLeft } from 'lucide-react';
+import { getErrorMessage } from '../utils/errorUtils';
 
 /**
  * ErrorState renders tailored visual states for expired, missing, limit-reached, or server errors.
@@ -86,7 +87,7 @@ export function ErrorState({
   }
 
   const finalTitle = title || defaultTitle;
-  const finalMessage = message || defaultMessage;
+  const finalMessage = getErrorMessage(message, defaultMessage);
 
   return (
     <motion.div
