@@ -22,6 +22,7 @@ import { useToast } from '../components/Toast';
 import dropService from '../services/dropService';
 import { formatFileSize, getFileTypeLabel, getFileBadge } from '../utils/fileUtils';
 import { normalizeCode } from '../utils/formatUtils';
+import { getErrorCode, getErrorMessage } from '../utils/errorUtils';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -110,8 +111,8 @@ export function DropCreated() {
     return (
       <div className="py-16 px-4">
         <ErrorState
-          type={error.code === 'DROP_EXPIRED' ? 'expired' : 'not_found'}
-          message={error.message}
+          type={getErrorCode(error) === 'DROP_EXPIRED' ? 'expired' : 'not_found'}
+          message={getErrorMessage(error)}
         />
       </div>
     );
