@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { AlertCircle, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { getErrorMessage } from '../utils/errorUtils';
 
 /**
  * ConfirmDialog component for critical confirmations.
@@ -62,7 +63,7 @@ export function ConfirmDialog({
             </div>
 
             <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
-              {message}
+              {getErrorMessage(message)}
             </p>
 
             <div className="flex items-center justify-end gap-3">
