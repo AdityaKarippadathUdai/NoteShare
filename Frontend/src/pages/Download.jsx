@@ -23,6 +23,7 @@ import { useToast } from '../components/Toast';
 import { useDrop } from '../hooks/useDrop';
 import { formatFileSize, getFileTypeLabel, getFileBadge } from '../utils/fileUtils';
 import { formatCode, normalizeCode } from '../utils/formatUtils';
+import { getErrorCode, getErrorMessage } from '../utils/errorUtils';
 
 export function DownloadPage() {
   const { code: rawCode } = useParams();
@@ -68,7 +69,7 @@ export function DownloadPage() {
       addToast('File unlocked successfully!', 'success');
       setPasswordInput('');
     } else {
-      const msg = res.error?.message || 'Incorrect password. Please try again.';
+      const msg = getErrorMessage(res.error, 'Incorrect password. Please try again.');
       setUnlockError(msg);
       addToast(msg, 'error');
     }
@@ -80,7 +81,7 @@ export function DownloadPage() {
       setDownloadSuccess(true);
       addToast('File downloaded successfully!', 'success');
     } else {
-      const msg = res.error?.message || 'Failed to download file.';
+      const msg = getErrorMessage(res.error, 'Failed to download file.');
       addToast(msg, 'error');
     }
   };
@@ -103,9 +104,9 @@ export function DownloadPage() {
   // Handle distinct backend error states (Section 20)
   if (error) {
     let errorType = 'not_found';
-    if (error.code === 'DROP_EXPIRED' || error.status === 410) {
+    if (getErrorCode(error) === 'DROP_EXPIRED' || error.status === 410) {
       errorType = 'expired';
-    } else if (error.code === 'LIMIT_REACHED' || error.status === 403) {
+    } else if (getErrorCode(error) === 'DOWNLOAD_LIMIT_REACHED' || getErrorCode(error) === 'LIMIT_REACHED' || error.status === 403) {
       errorType = 'limit_reached';
     } else if (error.status >= 500) {
       errorType = 'server_error';
@@ -115,7 +116,7 @@ export function DownloadPage() {
       <div className="py-16 px-4">
         <ErrorState
           type={errorType}
-          message={error.message}
+          message={getErrorMessage(error)}
           onRetry={() => loadDrop(cleanCode)}
         />
       </div>
