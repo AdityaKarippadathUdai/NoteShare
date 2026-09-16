@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getErrorCode, getErrorMessage } from '../utils/errorUtils';
 
 /**
  * Base URL configured via VITE_API_URL environment variable.
@@ -32,13 +33,9 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     const formattedError = {
-      message:
-        error.response?.data?.message ||
-        error.response?.data?.error ||
-        error.message ||
-        'An unexpected network or server error occurred.',
+      message: getErrorMessage(error, 'An unexpected network or server error occurred.'),
       status: error.response?.status || 500,
-      code: error.response?.data?.code || error.code || 'API_ERROR',
+      code: getErrorCode(error),
       requiresPassword: Boolean(error.response?.data?.requiresPassword),
       data: error.response?.data || null,
       isNetworkError: !error.response,
