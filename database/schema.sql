@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS drops (
   download_count INTEGER NOT NULL DEFAULT 0,
   password_hash TEXT NULL,
   delete_after_first_download BOOLEAN NOT NULL DEFAULT FALSE,
-  status VARCHAR(20) NOT NULL DEFAULT 'active',
+  status VARCHAR(32) NOT NULL DEFAULT 'active',
   management_token_hash TEXT NULL,
   CHECK (status IN ('active', 'expired', 'deleted', 'download_limit_reached'))
 );
